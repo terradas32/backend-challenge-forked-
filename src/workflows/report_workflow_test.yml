@@ -1,0 +1,6 @@
+name: report_workflow_test
+steps:
+  - taskType: polygonArea
+    stepNumber: 1
+  - taskType: report
+    stepNumber: 2

@@ -33,4 +33,10 @@ export class Task {
 
   @Column({ type: "text", nullable: true })
   output?: string;
+
+  @Column({ type: "text", nullable: true })
+  workflowId?: string;
+
+  @Column({ type: "varchar", nullable: true })
+  dependsOn?: string; // ID de otra tarea de la que depende
 }

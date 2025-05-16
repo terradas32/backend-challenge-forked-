@@ -3,17 +3,23 @@ import express from "express";
 import analysisRoutes from "./routes/analysisRoutes";
 import defaultRoute from "./routes/defaultRoute";
 import { taskWorker } from "./workers/taskWorker";
+import workflowRoutes from "./routes/workflowRoutes";
 import { AppDataSource } from "./data-source"; // Import the DataSource instance
 
 const app = express();
 app.use(express.json());
 app.use("/analysis", analysisRoutes);
+app.use("/workflow", workflowRoutes);
 app.use("/", defaultRoute);
 
 AppDataSource.initialize()
   .then(() => {
     // Start the worker after successful DB connection
     taskWorker();
+
+    app.get("/ping", (req, res) => {
+      res.json({ message: "pong" });
+    });
 
     app.listen(3000, () => {
       console.log("Server is running at http://localhost:3000");

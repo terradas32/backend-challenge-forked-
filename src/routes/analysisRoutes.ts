@@ -1,18 +1,21 @@
 import { Router } from "express";
 import { AppDataSource } from "../data-source";
-import { WorkflowFactory } from "../workflows/WorkflowFactory"; // Create a folder for factories if you prefer
+import { WorkflowFactory } from "../workflows/WorkflowFactory";
 import path from "path";
 
 const router = Router();
 const workflowFactory = new WorkflowFactory(AppDataSource);
 
 router.post("/", async (req, res) => {
-  const { clientId, geoJson } = req.body;
-  // const workflowFile = path.join(__dirname, '../workflows/example_workflow.yml');
-  const workflowFile = path.join(
-    __dirname,
-    "../workflows/polygon_area_test.yml"
-  );
+  const { clientId, geoJson, workflowName } = req.body;
+
+  let workflowFile: string;
+
+  if (!workflowName) {
+    workflowFile = path.join(__dirname, "../workflows/example_workflow.yml");
+  } else {
+    workflowFile = path.join(__dirname, "../workflows", `${workflowName}.yml`);
+  }
 
   try {
     const workflow = await workflowFactory.createWorkflowFromYAML(
